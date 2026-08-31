@@ -4,7 +4,11 @@ Run only these with:  uv run pytest -m network
 Skip them with:       uv run pytest -m "not network"
 """
 
+import logging
+
 import pytest
+
+logger = logging.getLogger(__name__)
 
 # Test VINs listed in INSTRUCTIONS.md
 INSTRUCTIONS_TEST_VINS = [
@@ -46,6 +50,27 @@ def test_lookup_decodes_custom_vin(client, custom_vin):
 
     response = client.post("/lookup", json={"vin": custom_vin})
 
-    assert response.status_code == 200
+    if response.status_code != 200:
+        logger.error(
+            "Lookup failed for VIN %r -- status=%s detail=%s",
+            custom_vin,
+            response.status_code,
+            response.json(),
+        )
+        pytest.fail(
+            f"Lookup failed for VIN {custom_vin!r}: "
+            f"status={response.status_code} detail={response.json()}"
+        )
+
     body = response.json()
+    logger.info(
+        "Lookup succeeded for VIN %s -- make=%s model=%s model_year=%s body_class=%s cached=%s",
+        body["vin"],
+        body["make"],
+        body["model"],
+        body["model_year"],
+        body["body_class"],
+        body["cached"],
+    )
+
     assert body["vin"] == custom_vin.upper()

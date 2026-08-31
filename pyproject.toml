@@ -26,3 +26,6 @@ dev = [
 markers = [
     "network: tests that make real calls to the vPIC API (require internet access)",
 ]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(levelname)s %(name)s: %(message)s"
