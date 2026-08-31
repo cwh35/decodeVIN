@@ -9,6 +9,7 @@ from decodevin.db import fetch_all
 def cache_to_parquet_bytes() -> bytes:
     rows = fetch_all()
 
+    # fetch all data related to vehicle information
     columns = {
         "vin": [row["vin"] for row in rows],
         "make": [row["make"] for row in rows],

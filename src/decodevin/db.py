@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from contextlib import contextmanager
-from pathlib import Path
+from pathlib import Path # used for DB file path
 from typing import Iterator, Optional
 
 DB_PATH = Path(os.environ.get("DECODEVIN_DB_PATH", "decodevin.db"))
