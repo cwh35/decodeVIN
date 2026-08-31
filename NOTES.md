@@ -1,5 +1,7 @@
 # VIN API
 
+A FastAPI backend that decodes VINs using the vPIC API and caches the results in SQLite, so repeat lookups skip the external call. It also supports removing entries from the cache and exporting the whole cache as a Parquet file.
+
 ## Routes
 
 | Route | Description |
