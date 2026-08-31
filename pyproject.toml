@@ -1,0 +1,18 @@
+[project]
+name = "decodevin"
+version = "0.1.0"
+description = "API to decode VINs, remove VINs from the database, and export data from the database"
+readme = "README.md"
+authors = [
+    { name = "Cameron Henning", email = "cwh35@pitt.edu" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi[standard]>=0.128.8",
+    "httpx>=0.28.1",
+    "pyarrow>=21.0.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
