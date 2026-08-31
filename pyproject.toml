@@ -16,3 +16,13 @@ dependencies = [
 [build-system]
 requires = ["uv_build>=0.12.7,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "network: tests that make real calls to the vPIC API (require internet access)",
+]
