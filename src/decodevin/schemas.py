@@ -31,7 +31,6 @@ class LookupResponse(BaseModel):
     body_class: str
     cached: bool
 
-
 class RemoveResponse(BaseModel):
     vin: str
     cache_delete_success: bool
