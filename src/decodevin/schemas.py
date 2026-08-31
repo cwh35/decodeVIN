@@ -14,7 +14,7 @@ class VinRequest(BaseModel):
     # ... = this field is required, if vin is missing, it will error out
     vin: str = Field(..., min_length=17, max_length=17)
 
-    @field_validator("vin") 
+    @field_validator("vin") # this decorator automatically calls validate_vin
     @classmethod
     def validate_vin(cls, v: str) -> str:
         if not v.isalnum():
