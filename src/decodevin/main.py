@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Response
+# streaming response: used for arbitrary bytes with a custom content type
 from fastapi.responses import StreamingResponse
 
 from decodevin import db
@@ -17,9 +18,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="decodeVIN", lifespan=lifespan)
 
-
+# get vehicle info from VIN, cache it, and return the info
 @app.post("/lookup", response_model=LookupResponse)
 async def lookup(request: VinRequest) -> LookupResponse:
+    # check if the VIN is already cached in the database
     cached = db.get_cached(request.vin)
     if cached is not None:
         return LookupResponse(
@@ -32,10 +34,13 @@ async def lookup(request: VinRequest) -> LookupResponse:
         )
 
     try:
+        # if not cached, call vPIC API to decode the VIN
         decoded = await decode_vin(request.vin)
+    # raised either on an HTTP failure or undecodable VIN
     except VpicError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
+    # insert the decoded VIN info into the database cache
     db.insert_cached(
         request.vin,
         decoded["make"],
@@ -44,6 +49,7 @@ async def lookup(request: VinRequest) -> LookupResponse:
         decoded["body_class"],
     )
 
+    # return the decoded VIN info in the response
     return LookupResponse(
         vin=request.vin,
         make=decoded["make"],
